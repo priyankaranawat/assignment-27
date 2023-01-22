@@ -1,0 +1,610 @@
+1)
+
+#include<iostream>
+using namespace std;
+class Complex
+{
+    private:
+        int a ;
+        int b;
+    public:
+       void setData(int x,int y)
+       {
+           a=x;
+           b=y;
+       }
+       Complex operator+(Complex X)
+       {
+           Complex temp;
+           temp.a=a+X.a;
+           temp.b=b+X.b;
+           return temp;
+       }
+       Complex operator-()
+       {
+           Complex temp;
+           temp.a=-a;
+           temp.b=-b;
+           return temp;
+       }
+       Complex operator*(Complex X)
+       {
+           Complex temp;
+           temp.a=a*X.a;
+           temp.b=b*X.b;
+           return temp;
+       }
+       bool operator==(Complex X)
+       {
+           if((a==X.a)&&(b==X.b))
+            return true;
+           else
+            return false;
+       }
+       void showData()
+       {
+           cout<<"\nReal= "<<a<<"  img = "<<b;
+       }
+
+};
+int main()
+{
+    Complex c1,c2,c3,c4,c5;
+    bool check;
+    c1.setData(3,4);
+    c2.setData(5,6);
+    c3=c1+c2;                                           //c3=c1.operator+(c2);
+    c4=-c3;                                             //c4=c3.operator-();
+    c5=c1*c2;                                           //c5=c1.operator*(c2);
+    check=c1==c2;                                        //check=c1.operator==(c2);
+    c1.showData();
+    c2.showData();
+    c3.showData();
+    c4.showData();
+    c5.showData();
+    if(check==1)
+        cout<<"\nc1 and c2 are equal";
+    else
+        cout<<"\nc1 and c2 are not equal";
+    return 0;
+}
+
+
+
+2)
+
+#include<iostream>
+using namespace std;
+class Complex
+{
+    private:
+        int a;
+        int b;
+    public:
+        void setData(int x,int y)
+        {
+            a=x;
+            b=y;
+        }
+        void showData()
+        {
+            cout<<"\nReal= "<<a<<" img= "<<b;
+        }
+        void operator++()                                        //pre increment
+        {
+            ++a;
+            ++b;
+        }
+        void operator++(int dummy)                                       //post increment
+        {
+            a++;
+            b++;
+        }
+        void operator--()                                            //pre decrement
+        {
+            --a;
+            --b;
+        }
+        void operator--(int dummy)                                  //post decrement
+        {
+            a--;
+            b--;
+        }
+
+};
+int main()
+{
+    Complex c1,c2;
+    c1.setData(3,6);
+    c2.setData(7,8);
+    cout<<"Original data in c1";
+    c1.showData();
+    cout<<"\nAfter pre increment in c1 ";
+    ++c1;                                           //c2=c1.operator++();
+     c1.showData();
+     cout<<"\nAfter post increment on updated value in c1 ";
+     c1++;                                               //c3=c1.operator--();
+
+    c1.showData();
+    cout<<"\n\nOriginal data in c2 ";
+    c2.showData();
+    cout<<"\nAfter pre increment in c2";
+    ++c2;
+    c2.showData();
+    cout<<"\nAfter post increment on updated value in c2";
+    c2++;
+    c2.showData();
+    return 0;
+}
+
+
+3)
+
+#include<iostream>
+using namespace std;
+class Complex
+{
+    private:
+        int a;
+        int b;
+    public:
+        friend Complex operator+(Complex ,Complex );
+        void setData(int x,int y)
+        {
+            a=x;
+            b=y;
+        }
+        void showData()
+        {
+            cout<<"\nReal = "<<a<<"  img = "<<b;
+        }
+};
+Complex operator+(Complex X,Complex Y)                      //defining friend function
+{
+    Complex temp;
+    temp.a=X.a+Y.a;
+    temp.b=X.b+Y.b;
+    return temp;
+}
+int main()
+{
+    Complex c1,c2,c3;
+    c1.setData(3,8);
+    c2.setData(4,1);
+    c3=c1+c2;                           //c3=operator+(c1,c2);
+    c1.showData();
+    c2.showData();
+    c3.showData();
+    return 0;
+}
+
+
+4)
+
+#include<iostream>
+using namespace std;
+class Time
+{
+    private:
+        int hr;
+        int minute;
+        int sec;
+    public:
+        Time(){hr=0;minute=0;sec=0;}
+        bool operator==(Time X)
+        {
+            int s1,s2;                                                  //varibles to store time in seconds for both objects
+            s1=hr*3600+minute*60+sec;
+            s2=X.hr*3600+X.minute*60+X.sec;
+            if(s1==s2)
+                return true;
+            else
+                return false;
+        }
+
+        friend int operator>>(istream &is,Time &X)  ;                      //accept time
+        friend void operator<<(ostream &,Time);                         //display time
+};
+        int operator>>(istream &is,Time &X)                        //accept time
+        {
+           cout<<"\nEnter Hours : ";
+           cin>>X.hr;
+           cout<<"\nEnter Minutes : ";
+           cin>>X.minute;
+           cout<<"\nEnter Seconds : ";
+           cin>>X.sec;
+           if(X.hr<=24)
+                return 1;                                       //check time is valid or not
+           else
+            return 0;
+        }
+
+        void operator<<(ostream &os,Time X)                             //display time
+        {
+            cout<<"\nHours   :"<<X.hr;
+            cout<<"\nMinutes :"<<X.minute;
+            cout<<"\nSeconds :"<<X.sec;
+        }
+int main()
+{
+    Time t1,t2;
+    bool check;
+    cout<<"Enter first time\n-------------------------------\n";
+     while(!(cin>>t1))
+    {
+        cout<<"\nInvalid time\nEnter time again";
+    }
+
+
+     cout<<"\nFirst time";                                                                             //operator>>(cin,t1);
+     cout<<t1;                                                                //operator<<(cout,t1);
+    cout<<"\n\nEnter second time\n---------------------------------\n";
+     while(!(cin>>t2))
+     {
+         cout<<"\nInvalid time \nEnter time again";
+     }                                                                               //operator>>(cin,t2);
+     cout<<"\nSecond time";
+     cout<<t2;                                                                        //operator<<(cin,t2);
+    check=t1==t2;                                                                     //  check=t1.operator==(t2);
+    if(check==1)
+        cout<<"\n\nTimes are same";
+    else
+        cout<<"\n\nTimes are not same";
+    return 0;
+}
+
+
+5)
+
+#include<iostream>
+using namespace std;
+class Numbers
+{
+    private:
+        int x,y,z;
+    public:
+        void setData(int a,int b,int c)
+        {
+            x=a;
+            y=b;
+            z=c;
+        }
+        void showData()
+        {
+            cout<<"\n"<<x<<" , "<<y<<" , "<<z;
+        }
+        Numbers operator-()
+        {
+            Numbers temp;
+            temp.x=-x;
+            temp.y=-y;
+            temp.z=-z;
+            return temp;
+        }
+};
+int main()
+{
+    Numbers n1,n2;
+    n1.setData(5,30,89);
+    n2=-n1;                                // n2=n1.operator-();
+    cout<<"Original numbers:";
+    n1.showData();
+    cout<<"\nAfter negation";
+    n2.showData();
+    return 0;
+}
+
+
+6)
+
+#include<iostream>
+#include<string.h>
+using namespace std;
+class CString
+{
+    private:
+        char ch[50];
+    public:
+        void setData(char c[])
+        {
+            strcpy(ch,c);
+        }
+        void showData()
+        {
+            cout<<endl<<ch;
+        }
+        CString operator+(CString X)
+        {
+            CString temp;
+            strcpy(temp.ch,ch);
+            strcat(temp.ch,X.ch);
+            return temp;
+        }
+        bool operator==(CString X)
+        {
+            if(strcmp(ch,X.ch)==0)
+                return true;
+            else
+                return false;
+        }
+        char* getString()
+        {
+            return ch;
+        }
+};
+int main()
+{
+    bool check;
+    CString ob1,ob2,ob3;
+    char string1[50],string2[50];
+    cout<<"Enter first string ";fgets(string1,50,stdin);
+    string1[strlen(string1)-1]='\0';
+    ob1.setData(string1);
+
+    cout<<"\nEnter second string ";fgets(string2,50,stdin);
+    string2[strlen(string2)-1]='\0';
+    ob2.setData(string2);
+
+    ob3=ob1+ob2;                                             //ob3=ob1.operator+(ob2);
+    cout<<"\n\nAfter concatenation we get";
+    ob3.showData();
+    check=ob1==ob2;                                         //check=ob1.operator==(ob2);
+    if(check==0)
+        cout<<"\n\nStrings "<<ob1.getString()<<" and "<<ob2.getString()<<" are not equal!\n";
+    else
+        cout<<"\n\nStrings "<<ob1.getString()<<" and "<<ob2.getString()<<" are equal!\n";
+    return 0;
+}
+
+
+7)
+
+#include<iostream>
+using namespace std;
+class fraction
+{
+    private:
+        long numerator;
+        long denominator;
+    public:
+        fraction()                                                                                  //non parameterized constructor
+        {
+            numerator=0;
+            denominator=0;
+        }
+
+
+        void showData()
+        {
+            cout<<numerator<<"/"<<denominator;
+        }
+  /*     fraction operator++()
+        {
+            fraction temp;
+            temp.numerator=numerator++;
+            temp.denominator=denominator++;
+            return temp;
+        } */
+
+        friend void operator>>(istream &is,fraction &X);            //istream class is predefined hence we cannot make an object of it's class, hence give an alias name to cout
+        friend void operator<<(ostream &os,fraction Y);
+        fraction operator++(int dummy)                                              //post increment
+        {
+            numerator++;
+            denominator++;
+            return (*this);
+        }
+        fraction operator++()                                                       //pre increment
+        {
+            ++numerator;
+            ++denominator;
+            return (*this);
+        }
+};
+void operator>>(istream &is,fraction &X)                         //object dot karke call nhi kar rahe (friend fn hai),hence jis object mai data read krna hao,uska bhi reference pass kar do ,alias name bann raha hai ,new object nhi bann raha,toh data read ho jayega
+{
+   cout<<"\nNumerator   : ";
+   cin>>X.numerator;
+   cout<<"\nDenominator : ";
+   cin>>X.denominator;
+}
+void operator<<(ostream &os,fraction Y)
+{
+    cout<<Y.numerator<<"/"<<Y.denominator;
+}
+
+int main()
+{
+    fraction f1,f2;
+    cout<<"f1 :";
+    cout<<f1;
+    cout<<"\nf2 :";
+    cout<<f2;
+    cout<<"\n\nEnter first fraction value\n";
+    cin>>f1;
+    f1++;                                                 //  f1.operator++();
+    cout<<"\nf1++  : ";
+    cout<<f1;
+    ++f1;
+    cout<<"\n++f1  : ";
+    cout<<f1;
+    cout<<"\n\nEnter second fraction value\n";
+    cin>>f2;
+    f2=++f1;
+    cout<<"\nf2=++f1";
+    cout<<"\nf1   : "<<f1;
+    cout<<"\nf2   : "<<f2;
+    f2=f1++;
+    cout<<"\n\nf2=f1++";
+    cout<<"\nf1   : "<<f1;
+    cout<<"\nf2   : "<<f2;
+    return 0;
+}
+
+
+8)
+#include<iostream>
+using namespace std;
+class Matrix
+{
+    private:
+        int a[3][3];
+    public:
+        void inputData()
+        {
+            int i,j;
+            cout<<"Enter matrix elements (3*3) :\n";
+            for(i=0;i<3;i++)
+            {
+                for(j=0;j<3;j++)
+                {
+                  cin>>a[i][j];
+                }
+            }
+        }
+        void displayData()
+        {
+            int i,j;
+            cout<<"\nMatrix is :\n";
+            for(i=0;i<3;i++)
+            {
+                for(j=0;j<3;j++)
+                {
+                    cout<<a[i][j]<<" ";
+                }
+                cout<<endl;
+            }
+        }
+        Matrix operator-()
+        {
+            Matrix temp;
+            int i,j;
+            for(i=0;i<3;i++)
+            {
+                for(j=0;j<3;j++)
+                {
+                    temp.a[i][j]=-a[i][j];                      //a[i][j] is caller object ka a[i][j]
+                }
+                cout<<endl;
+            }
+            return temp;
+        }
+};
+int main()
+{
+    Matrix m1,m2;
+    m1.inputData();
+    m1.displayData();
+    m2=-m1;                                             //m2=m1.operator-();
+    m2.displayData();
+    return 0;
+}
+
+
+9)
+
+#include<iostream>
+using namespace std;
+class mystring
+{
+    private:
+        char str[100];
+    public:
+        void inputString()
+        {
+            fgets(str,100,stdin);
+        }
+        void showData()
+        {
+            //int i;
+            //for(i=0;str[i]!='\0';i++)
+            //{
+                cout<<str;
+            //}
+        }
+        mystring operator!()
+        {
+            mystring temp;int i;
+            for(i=0;str[i]!='\0';i++)
+            {
+                if(str[i]>=97&&str[i]<=122)
+                    temp.str[i]=str[i]-32;
+                else
+                if(str[i]>=65&&str[i]<=90)
+                    temp.str[i]=str[i]+32;
+            }
+            return temp;
+        }
+};
+int main()
+{
+    mystring m1,m2;
+    m1.inputString();
+
+    m2=!m1;//m2=m1.operator!();
+    m2.showData();
+    return 0;
+}
+
+
+10)
+
+#include<iostream>
+using namespace std;
+class Matrix
+{
+    private:
+        int arr[3][3];
+    public:
+        friend void operator>>(istream &is,Matrix &X);                           //declare input function
+        friend void operator<<(ostream &os,Matrix X);                                       //declare display function
+        Matrix operator+(Matrix X)
+        {
+            Matrix temp;
+            int i,j;
+            for(i=0;i<3;i++)
+            {
+                for(j=0;j<3;j++)
+                {
+                    temp.arr[i][j]=arr[i][j]+X.arr[i][j];
+                }
+            }
+            return temp;
+        }
+};
+void operator>>(istream &is,Matrix &X)                                          //define INPUT function
+{
+    int i,j;
+    cout<<"\n\nEnter matrix (3*3)\n";
+    for(i=0;i<3;i++)
+    {
+        for(j=0;j<3;j++)
+        {
+            cin>>X.arr[i][j];                                           //is>>X.arr[i][j];
+        }
+    }
+}
+void operator<<(ostream &os,Matrix X)                                   //define display function
+{
+    int i,j;
+    for(i=0;i<3;i++)
+    {
+        for(j=0;j<3;j++)
+        {
+            cout<<X.arr[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+int main()
+{
+    Matrix m1,m2,m3;
+    cin>>m1;
+    cin>>m2;
+    cout<<"\nFirst Matrix:\n"<<m1;
+    cout<<"\n\nSecond Matrix :\n"<<m2;
+    m3=m1+m2;                                                       //m3=m1.operator+(m2);
+    cout<<"\n\nAddition of matrices is:\n"<<m3;
+    return 0;
+}
+
